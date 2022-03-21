@@ -1,9 +1,13 @@
+from sys import argv
 from flask import Flask
 from flask_login import LoginManager
 
 
+if not argv[1]:
+    exit(1)
+
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '6t76/&R6fnz7n)xqjK8(sa'
+app.config['SECRET_KEY'] = '6t76R6fnz7n)xqjK8(sa'
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///access.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
