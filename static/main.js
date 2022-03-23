@@ -62,8 +62,16 @@ function subscribeUser() {
 		})
 		.then(function(subscription) {
 			console.log('User is subscribed.');
-
-			updateSubscriptionOnServer(subscription);
+			$.ajax({
+				type:"POST",
+				url:'/subscription/',
+				content_type: "application/json",
+				data: {"subscription_token": JSON.stringify(subscription)},
+				success:function(response){
+					console.log("response",response);
+					localStorage.setItem('applicationServerPublicKey',response.public_key);
+				}
+			})
 			localStorage.setItem('sub_token',JSON.stringify(subscription));
 			isSubscribed = true;
 
@@ -124,7 +132,6 @@ function initializeUI() {
 
 if ('serviceWorker' in navigator && 'PushManager' in window) {
 	console.log('Service Worker and Push is supported');
-
 	navigator.serviceWorker.register("/static/sw.js")
 		.then(function(swReg) {
 			console.log('Service Worker is registered', swReg);
@@ -136,6 +143,7 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
 			console.error('Service Worker Error', error);
 		});
 } else {
+	alert(('serviceWorker' in navigator) + "   " + ('PushManager' in window));
 	console.warn('Push meapplicationServerPublicKeyssaging is not supported');
 	pushButton.textContent = 'Push Not Supported';
 }

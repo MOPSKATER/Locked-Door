@@ -8,7 +8,7 @@ import sqlite3
 con = sqlite3.connect('access.db')
 con.execute("CREATE TABLE IF NOT EXISTS opened (time text, PRIMARY KEY (time))")
 con.execute(
-    "CREATE TABLE IF NOT EXISTS users (id integer, username text, salt text, password text, PRIMARY KEY (ID))")
+    "CREATE TABLE IF NOT EXISTS users (id integer, username text, salt text, password text, token text, PRIMARY KEY (ID))")
 con.close()
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

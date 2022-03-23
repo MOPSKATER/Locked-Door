@@ -1,5 +1,5 @@
 import os
-from __main__ import app, db
+from __main__ import db
 from pywebpush import webpush
 from flask_wtf import FlaskForm
 from flask_login import UserMixin
@@ -27,6 +27,7 @@ class Users(db.Model, UserMixin):
     username = db.Column(db.String(20), nullable=False, unique=True)
     salt = db.Column(db.String(20), nullable=False)
     password = db.Column(db.String(80), nullable=False)
+    token = db.Column(db.String(20), nullable=True)
 
 
 class LoginForm(FlaskForm):

@@ -1,8 +1,8 @@
 import json
 import flask
 import flask_bcrypt as bcrypt
-from __main__ import app, login_manager
-from flask_login import login_required, login_user
+from __main__ import app, login_manager, db
+from flask_login import current_user, login_required, login_user
 from flask import Response, jsonify, render_template, request
 from utility import LoginForm, Users, VAPID_PUBLIC_KEY, send_web_push
 
@@ -30,38 +30,28 @@ def login():
     return render_template("login.html", form=form)
 
 
-@app.route("/subscription/", methods=["GET", "POST"])
+@app.route("/subscription/", methods=["GET", "POST", "DELETE"])
 @login_required
 def subscription():
     """
         POST creates a subscription
         GET returns vapid public key which clients uses to send around push notification
+        DELETE removes subscription
     """
 
     if request.method == "GET":
         return Response(response=json.dumps({"public_key": VAPID_PUBLIC_KEY}),
                         headers={"Access-Control-Allow-Origin": "*"}, content_type="application/json")
+    if request.method == "DELETE":
+        current_user.token = None
+        db.session.commit()
+        return Response(status=200)
 
-    subscription_token = request.get_json("subscription_token")
+    current_user.token = request.form["subscription_token"]
+    db.session.commit()
     return Response(status=201, mimetype="application/json")
 
 
-@login_required
-@app.route("/push_v1/", methods=['POST'])
 def push_v1():
-    message = "Push Test v1"
-    print("is_json", request.is_json)
-
-    if not request.json or not request.json.get('sub_token'):
-        return jsonify({'failed': 1})
-
-    print("request.json", request.json)
-
-    token = request.json.get('sub_token')
-    try:
-        token = json.loads(token)
-        send_web_push(token, message)
-        return jsonify({'success': 1})
-    except Exception as e:
-        print("error", e)
-        return jsonify({'failed': str(e)})
+    for user in Users.query.all():
+        send_web_push(json.loads(user.token), user.username)
