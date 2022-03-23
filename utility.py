@@ -1,13 +1,11 @@
 import os
+from __main__ import app, db
 from pywebpush import webpush
 from flask_wtf import FlaskForm
 from flask_login import UserMixin
-from main import login_manager, app
-from flask_sqlalchemy import SQLAlchemy
 from wtforms.validators import InputRequired, Length
 from wtforms import StringField, PasswordField, SubmitField
 
-db = SQLAlchemy(app)
 
 DER_BASE64_ENCODED_PRIVATE_KEY_FILE_PATH = os.path.join(
     os.getcwd(), "private_key.txt")
@@ -22,11 +20,6 @@ VAPID_PUBLIC_KEY = open(
 VAPID_CLAIMS = {
     "sub": "mailto:develop@raturi.in"
 }
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    return Users.query.get(int(user_id))
 
 
 class Users(db.Model, UserMixin):

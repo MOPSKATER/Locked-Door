@@ -1,10 +1,15 @@
 import json
 import flask
 import flask_bcrypt as bcrypt
-from main import app
+from __main__ import app, login_manager
 from flask_login import login_required, login_user
 from flask import Response, jsonify, render_template, request
 from utility import LoginForm, Users, VAPID_PUBLIC_KEY, send_web_push
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Users.query.get(int(user_id))
 
 
 @app.route('/')
