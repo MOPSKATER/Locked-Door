@@ -52,6 +52,20 @@ def subscription():
     return Response(status=201, mimetype="application/json")
 
 
-def push_v1():
-    for user in Users.query.all():
-        send_web_push(json.loads(user.token), user.username)
+@app.route("/api/sensor", methods=["GET"])
+def boardAPI():
+    api_key = request.args.get('api_key')
+    if api_key and api_key == "randkey":
+        command = request.args.get('command')
+        if command == "alive":
+            pass
+        elif command == "alert":
+            for user in Users.query.all():
+                send_web_push(json.loads(user.token), user.username)
+        return Response(status=200)
+    return Response(status=403)
+
+
+@app.route("/api/data", methods=["GET"])
+def dataAPI():
+    pass
