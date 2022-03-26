@@ -6,6 +6,8 @@ from flask_login import current_user, login_required, login_user
 from flask import Response, jsonify, render_template, request
 from utility import LoginForm, Users, VAPID_PUBLIC_KEY, send_web_push
 
+api_keys = open("apikeys.txt", "r").read().split("\n")
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -55,7 +57,7 @@ def subscription():
 @app.route("/api/sensor", methods=["GET"])
 def boardAPI():
     api_key = request.args.get('api_key')
-    if api_key and api_key == "randkey":
+    if api_key and api_key in api_keys:
         command = request.args.get('command')
         if command == "alive":
             pass
