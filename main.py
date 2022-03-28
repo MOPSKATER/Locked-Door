@@ -1,3 +1,4 @@
+import imp
 from sys import argv
 from flask import Flask
 from flask_login import LoginManager
@@ -18,6 +19,7 @@ login_manager.login_view = "login"
 
 db = SQLAlchemy(app)
 
+import Models
 import routes
 import utility
 

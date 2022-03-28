@@ -2,7 +2,6 @@ import os
 from __main__ import db
 from pywebpush import webpush
 from flask_wtf import FlaskForm
-from flask_login import UserMixin
 from wtforms.validators import InputRequired, Length
 from wtforms import StringField, PasswordField, SubmitField
 
@@ -20,14 +19,6 @@ VAPID_PUBLIC_KEY = open(
 VAPID_CLAIMS = {
     "sub": "mailto:develop@raturi.in"
 }
-
-
-class Users(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), nullable=False, unique=True)
-    salt = db.Column(db.String(20), nullable=False)
-    password = db.Column(db.String(80), nullable=False)
-    token = db.Column(db.String(20), nullable=True)
 
 
 class LoginForm(FlaskForm):
