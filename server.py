@@ -27,7 +27,7 @@ while True:
         if data == "opened":
             dt = datetime.now()
             con = sqlite3.connect('access.db')
-            con.execute("INSERT INTO opened (time) VALUES (" + dt + ")")
+            con.execute(f"INSERT INTO opened (time) VALUES ({dt})")
             con.commit()
             con.close()
 
