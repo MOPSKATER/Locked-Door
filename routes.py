@@ -1,16 +1,16 @@
 import json
 import flask
-from models import Device
 import flask_bcrypt as bcrypt
+from models import Devices, Users
 from __main__ import app, login_manager, db
 from flask import Response, render_template, request
 from flask_login import current_user, login_required, login_user
-from utility import LoginForm, Users, VAPID_PUBLIC_KEY, send_web_push
+from utility import LoginForm, VAPID_PUBLIC_KEY, send_web_push
 
 api_keys = open("apikeys.txt", "r").read().split("\n")
 devices = []
 
-x = Device.query.fetchall()
+x = Devices.query.all()
 
 
 @login_manager.user_loader

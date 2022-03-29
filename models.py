@@ -11,7 +11,7 @@ class Users(db.Model, UserMixin):
     token = db.Column(db.String(20), nullable=True)
 
 
-class Device(db.Model):
+class Devices(db.Model):
 
     apikey = db.Column(db.String(64), primary_key=True, nullable=False)
     name = db.Column(db.String(50), nullable=True)
@@ -22,5 +22,6 @@ class Device(db.Model):
 
 
 class Opened(db.Model):
-    time = db.Column(db.DateTime)
-    device = db.Column(db.String(64), db.ForeignKey('Device.apikey'))
+    time = db.Column(db.DateTime, primary_key=False)
+    device = db.Column(db.String(64), db.ForeignKey(
+        'Device.apikey'), primary_key=True)
