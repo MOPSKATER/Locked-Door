@@ -20,6 +20,14 @@ renameValidator = Validator(
      "apikey": {"type": "string", "maxlength": 64, "minlength": 64}},
     require_all=True)
 
+sensorAPIValidator = Validator(
+    {
+        "api_key": {"type": "string", "maxlength": 64, "minlength": 64},
+        "command": {"type": "string", "allowed": ["alive", "alert"]}
+    },
+    reqire_all=True
+)
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -68,21 +76,24 @@ def subscription():
 
 @app.route("/api/sensor", methods=["GET"])
 def boardAPI():
+    if not sensorAPIValidator.validate(request.args):
+        return Response(json.dumps(sensorAPIValidator.errors), status=400)
     api_key = request.args.get("api_key")
-    # TODO Validate via validate
-    if api_key and api_key in api_keys:
-        command = request.args.get("command")
+    command = request.args.get("command")
+    if api_key in api_keys:
+        global devices
         if command == "alive":
             missing = True
             for device in devices:
-                if device["apikey"] == api_key:
-                    device["lastSignal"] = datetime.now()
+                if device.apikey == api_key:
+                    device.lastSignal = datetime.now()
                     missing = False
             if missing:
                 new_Device = Devices()
                 new_Device.apikey = api_key
                 db.session.add(new_Device)
                 db.session.commit()
+                devices = Devices.query.all()
         elif command == "alert":
             for user in Users.query.all():
                 send_web_push(json.loads(user.token), user.username)
@@ -94,7 +105,7 @@ def boardAPI():
                 db.session.add(new_openend)
                 db.seccion.commit()
         return Response(status=200)
-    return Response(status=403)
+    return Response("Wrong api key", status=403)
 
 
 @app.route("/api/data", methods=["POST"])
