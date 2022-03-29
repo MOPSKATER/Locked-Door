@@ -1,4 +1,6 @@
+import json
 from __main__ import db
+from sqlalchemy import orm
 from datetime import datetime
 from flask_login import UserMixin
 
@@ -19,6 +21,13 @@ class Devices(db.Model):
     def __init__(self) -> None:
         super().__init__()
         self.lastSignal = datetime.now()
+
+    @orm.reconstructor
+    def init_on_load(self):
+        self.lastSignal = None
+
+    def toJSON(self):
+        return json.dumps({"apikey": self.apikey, "name": self.name, "lastSignal": self.lastSignal})
 
 
 class Opened(db.Model):
