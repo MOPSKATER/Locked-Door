@@ -97,13 +97,8 @@ def boardAPI():
     return Response(status=403)
 
 
-@app.route("/api/data", methods=["GET", "POST"])
-@login_required
-def dataAPI():
-    if request.method == "GET":
-        # FIXME
-        return Response(json.dumps(
-            {"devices": [device.toJSON() for device in devices], "opened": [opened.toJSON() for opened in db.session.query(Opened).limit(5)]}), content_type="application/json", status=200)
+@app.route("/api/data", methods=["POST"])
+def post_dataAPI():
     if not request.json:
         return Response(status=400)
     data = request.json
@@ -116,3 +111,11 @@ def dataAPI():
                 db.session.commit()
         return Response(status=200)
     return Response(json.dumps(renameValidator.errors), status=400)
+
+
+@app.route("/api/data", methods=["GET"])
+@login_required
+def get_dataAPI():
+    if request.method == "GET":
+        return Response(json.dumps(
+            {"devices": [device.toJSON() for device in devices], "opened": [opened.toJSON() for opened in db.session.query(Opened).limit(5)]}), content_type="application/json", status=200)
