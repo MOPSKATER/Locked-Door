@@ -116,6 +116,5 @@ def post_dataAPI():
 @app.route("/api/data", methods=["GET"])
 @login_required
 def get_dataAPI():
-    if request.method == "GET":
-        return Response(json.dumps(
-            {"devices": [device.toJSON() for device in devices], "opened": [opened.toJSON() for opened in db.session.query(Opened).limit(5)]}), content_type="application/json", status=200)
+    return Response(json.dumps(
+        {"devices": [device.toJSON() for device in devices], "opened": [opened.toJSON() for opened in db.session.query(Opened).limit(5)]}), content_type="application/json", status=200)
