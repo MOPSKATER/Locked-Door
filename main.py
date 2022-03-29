@@ -19,7 +19,7 @@ login_manager.login_view = "login"
 
 db = SQLAlchemy(app)
 
-import Models
+import models
 import routes
 import utility
 

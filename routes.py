@@ -1,6 +1,6 @@
 import json
 import flask
-from Models import Device
+from models import Device
 import flask_bcrypt as bcrypt
 from __main__ import app, login_manager, db
 from flask import Response, render_template, request
