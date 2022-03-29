@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import flask
 import flask_bcrypt as bcrypt
@@ -8,9 +9,7 @@ from flask_login import current_user, login_required, login_user
 from utility import LoginForm, VAPID_PUBLIC_KEY, send_web_push
 
 api_keys = open("apikeys.txt", "r").read().split("\n")
-devices = []
-
-x = Devices.query.all()
+devices = Devices.query.all()
 
 
 @login_manager.user_loader
@@ -64,7 +63,16 @@ def boardAPI():
     if api_key and api_key in api_keys:
         command = request.args.get('command')
         if command == "alive":
-            pass
+            missing = True
+            for device in devices:
+                if device["apikey"] == api_key:
+                    device["lastSignal"] = datetime.now()
+                    missing = False
+            if missing:
+                new_Device = Devices()
+                new_Device.apikey = api_key
+                db.session.add(new_Device)
+                db.session.commit()
         elif command == "alert":
             for user in Users.query.all():
                 send_web_push(json.loads(user.token), user.username)
