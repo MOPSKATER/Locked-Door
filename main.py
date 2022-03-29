@@ -17,7 +17,6 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 
 db = SQLAlchemy(app)
-db.session.expire_on_commit = False
 
 import models
 import routes
