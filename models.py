@@ -19,7 +19,7 @@ class Devices(db.Model):
     __tablename__ = 'devices'
     apikey = db.Column(db.String(64), primary_key=True, nullable=False)
     name = db.Column(db.String(50), nullable=True)
-    openedref = relationship("Opened", backref="device")
+    entrys = relationship("Opened", backref="device")
 
     def __init__(self) -> None:
         super().__init__()
@@ -35,7 +35,7 @@ class Devices(db.Model):
 
 class Opened(db.Model):
     __tablename__ = 'opened'
-    time = db.Column(db.DateTime, primary_key=False)
+    time = db.Column(db.DateTime, primary_key=True)
     devicekey = db.Column(db.String(64), ForeignKey(
         "devices.apikey"), primary_key=True)
 

@@ -1,7 +1,7 @@
 
 import json
-from urllib.request import Request
 import flask
+from sqlalchemy import desc
 import flask_bcrypt as bcrypt
 from datetime import datetime
 from cerberus import Validator
@@ -127,5 +127,12 @@ def post_dataAPI():
 @app.route("/api/data", methods=["GET"])
 @login_required
 def get_dataAPI():
-    return Response(json.dumps(
-        {"devices": [device.toJSON() for device in devices], "opened": [opened.toJSON() for opened in db.session.query(Opened).limit(5)]}), content_type="application/json", status=200)
+    return Response(
+        json.dumps(
+            {
+                "devices": [device.toJSON() for device in devices],
+                "opened": [opened.toJSON() for opened in db.session.query(Opened).order_by(desc("time")).limit(5).all()]
+            }
+        ),
+        content_type="application/json", status=200
+    )
