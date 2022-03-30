@@ -1,0 +1,59 @@
+body {
+  padding-left: 5vw;
+  background-color: #202020;
+}
+
+#devices {
+  width: 90vw;
+  height: 50vh;
+
+  display: grid;
+  grid-template-columns: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+  grid-template-rows: 33% 33% 33% 33%;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.device {
+  text-align: center;
+  max-height: 100%;
+  max-width: 90%;
+  margin: 0px;
+  border: 2px solid black;
+  padding-top: 2%;
+  border-radius: 2px;
+}
+
+.deviceinfo {
+  margin: 0px;
+  margin-top: 2%;
+  font-size: small;
+}
+
+#log {
+  width: 90vw;
+  height: 20vh;
+  margin-top: 3vh;
+  padding-left: 0px;
+}
+
+ul {
+  list-style: none;
+  height: 100%;
+}
+
+li {
+  height: 20%;
+  font-size: small;
+  color: white;
+}
+
+svg {
+  margin-top: 2%;
+  max-height: 40%;
+  fill: darkgray;
+}
+
+.font {
+  color: white;
+}
