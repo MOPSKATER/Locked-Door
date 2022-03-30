@@ -16,7 +16,7 @@
 	<div id="devices"></div>
 
 	<div id="log">
-		<ul></ul>
+		<ul id="opened"></ul>
 	</div>
 
 	<button id="subscriber">Werde Benachrichtigt</button>
@@ -34,6 +34,10 @@
 		<p id="name" class="deviceinfo font"></p>
 		<p id="lastsignal" class="deviceinfo font"></p>
 	</div>
+</template>
+
+<template>
+	<li id="entry"></li>
 </template>
 
 <script src="{{ url_for('static', filename='index.js') }}"></script> 

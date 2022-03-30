@@ -148,7 +148,53 @@ $(document).ready(function(){
 		type:"GET",
 		url:'/api/data',
 		success:function(response){
-			console.log(response)
+			const devicelist = document.querySelector('#devices');
+			const openedlist = document.querySelector('#opened');
+
+			removeAllChildNodes(devicelist)
+			removeAllChildNodes(openedlist)
+
+			response.devices.forEach(device => {
+				var jdevice = JSON.parse(device);
+				var tempDevice = document.getElementsByTagName("template")[0];
+
+				var clone = tempDevice.content.cloneNode(true);
+				var name = clone.querySelector("#name");
+				var lastSignal = clone.querySelector("#lastsignal");
+
+				name.innerHTML = jdevice.name == null ? "Unbenannt" : jdevice.name;
+				var date = jdevice.lastSignal == null ? null : new Date(jdevice.lastSignal);
+
+				if (!date){
+					lastSignal.style.color = "red";
+					lastSignal.innerHTML = "-";
+				}
+				else{
+					deltadate = (new Date.now() - date) / 60000;
+					if (deltadate > 1)
+						lastSignal.style.color = "red";
+					else
+						lastSignal.style.color = "green";
+					lastSignal.innerHTML = deltadate + "m";
+				}
+				devicelist.appendChild(clone);
+			});
+
+			response.opened.forEach(stamp => {
+				var jstamp = JSON.parse(stamp);
+				var tempStamp = document.getElementsByTagName("template")[1];
+				var clone = tempStamp.content.cloneNode(true);
+				var name = jstamp["name"] == null ? "Unbenannt" : jstamp.name;
+				var entry = clone.querySelector("#entry");
+				entry.innerHTML = name + ": " + jstamp.time;
+				openedlist.appendChild(clone);
+			});
 		}
 	})
 });
+
+function removeAllChildNodes(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
+}
