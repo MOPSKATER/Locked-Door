@@ -1,10 +1,12 @@
 
 import json
 import flask
+from numpy import delete
 from sqlalchemy import desc
 import flask_bcrypt as bcrypt
 from datetime import datetime
 from cerberus import Validator
+from zmq import device
 from models import Devices, Opened, Users
 from __main__ import app, login_manager, db
 from flask import Response, render_template, request
@@ -71,7 +73,7 @@ def subscription():
 
     current_user.token = request.form["subscription_token"]
     db.session.commit()
-    return Response(status=201, mimetype="application/json")
+    return Response(status=201)
 
 
 @app.route("/api/sensor", methods=["GET"])
@@ -127,11 +129,27 @@ def post_dataAPI():
 @app.route("/api/data", methods=["GET"])
 @login_required
 def get_dataAPI():
+    devs = []
+    for device in devices:
+        data = {
+            "name": device.name,
+            "lastSignal": device.lastSignal
+        }
+        devs.append(json.dumps(data))
+
+    openedList = []
+    for opened in db.session.query(Opened).order_by(desc("time")).limit(5).all():
+        data = {
+            "time": opened.time.strftime("%d/%m/%Y, %H:%M:%S"),
+            "device": opened.device.name
+        }
+        openedList.append(json.dumps(data))
+
     return Response(
         json.dumps(
             {
-                "devices": [device.toJSON() for device in devices],
-                "opened": [opened.toJSON() for opened in db.session.query(Opened).order_by(desc("time")).limit(5).all()]
+                "devices": devs,
+                "opened": openedList
             }
         ),
         content_type="application/json", status=200

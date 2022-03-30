@@ -43,19 +43,12 @@ function updateSubscriptionOnServer(subscription) {
 			type:"POST",
 			url:'/subscription/',
 			content_type: "application/json",
-			data: {"subscription_token": JSON.stringify(subscription)},
-			success:function(response){
-				console.log("response",response);
-				localStorage.setItem('applicationServerPublicKey',response.public_key);
-			}
+			data: {"subscription_token": JSON.stringify(subscription)}
 		})
 	} else {
 		$.ajax({
 			type:"DELETE",
-			url:'/subscription/',
-			success:function(response){
-				console.log("response",response);
-			}
+			url:'/subscription/'
 		})
 	}
 }
@@ -149,6 +142,13 @@ $(document).ready(function(){
 		url:'/subscription/',
 		success:function(response){
 			localStorage.setItem('applicationServerPublicKey',response.public_key);
+		}
+	})
+	$.ajax({
+		type:"GET",
+		url:'/api/data',
+		success:function(response){
+			console.log(response)
 		}
 	})
 });
