@@ -1,7 +1,6 @@
 'use strict';
 
-// const applicationServerPublicKey = "BNbxGYNMhEIi9zrneh7mqV4oUanjLUK3m+mYZBc62frMKrEoMk88r3Lk596T0ck9xlT+aok0fO1KXBLV4+XqxYM=";
-const pushButton = document.querySelector('.js-push-btn');
+const pushButton = document.querySelector('#subscriber');
 
 let isSubscribed = false;
 let swRegistration = null;
@@ -23,23 +22,32 @@ function urlB64ToUint8Array(base64String) {
 
 function updateBtn() {
 	if (Notification.permission === 'denied') {
-		pushButton.textContent = 'Push Messaging Blocked.';
+		pushButton.textContent = 'Einen Moment';
 		pushButton.disabled = true;
 		updateSubscriptionOnServer(null);
 		return;
 	}
 
 	if (isSubscribed) {
-		pushButton.textContent = 'Disable Push Messaging';
+		pushButton.textContent = 'Werde nicht mehr Benachrichtigt';
 	} else {
-		pushButton.textContent = 'Enable Push Messaging';
+		pushButton.textContent = 'Werde Benachrichtigt';
 	}
 
 	pushButton.disabled = false;
 }
 
 function updateSubscriptionOnServer(subscription) {
-	// TODO: Send subscription to application server
+	$.ajax({
+		type:"POST",
+		url:'/subscription/',
+		content_type: "application/json",
+		data: {"subscription_token": JSON.stringify(subscription)},
+		success:function(response){
+			console.log("response",response);
+			localStorage.setItem('applicationServerPublicKey',response.public_key);
+		}
+	})
 
 	const subscriptionJson = document.querySelector('.js-subscription-json');
 	const subscriptionDetails =
@@ -61,17 +69,8 @@ function subscribeUser() {
 			applicationServerKey: applicationServerKey
 		})
 		.then(function(subscription) {
+			updateSubscriptionOnServer(subscription)
 			console.log('User is subscribed.');
-			$.ajax({
-				type:"POST",
-				url:'/subscription/',
-				content_type: "application/json",
-				data: {"subscription_token": JSON.stringify(subscription)},
-				success:function(response){
-					console.log("response",response);
-					localStorage.setItem('applicationServerPublicKey',response.public_key);
-				}
-			})
 			localStorage.setItem('sub_token',JSON.stringify(subscription));
 			isSubscribed = true;
 
@@ -117,9 +116,6 @@ function initializeUI() {
 	swRegistration.pushManager.getSubscription()
 		.then(function(subscription) {
 			isSubscribed = !(subscription === null);
-
-			updateSubscriptionOnServer(subscription);
-
 			if (isSubscribed) {
 				console.log('User IS subscribed.');
 			} else {
@@ -143,34 +139,16 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
 			console.error('Service Worker Error', error);
 		});
 } else {
-	alert(('serviceWorker' in navigator) + "   " + ('PushManager' in window));
 	console.warn('Push meapplicationServerPublicKeyssaging is not supported');
 	pushButton.textContent = 'Push Not Supported';
 }
 
-function push_message() {
-	console.log("sub_token", localStorage.getItem('sub_token'));
-	$.ajax({
-		type: "POST",
-		url: "/push_v1/",
-		contentType: 'application/json; charset=utf-8',
-		dataType:'json',
-		data: JSON.stringify({'sub_token':localStorage.getItem('sub_token')}),
-		success: function( data ){
-			console.log("success",data);
-    },
-    error: function( jqXhr, textStatus, errorThrown ){
-        console.log("error",errorThrown);
-    }
-	});
-}
 
 $(document).ready(function(){
 	$.ajax({
 		type:"GET",
 		url:'/subscription/',
 		success:function(response){
-			console.log("response",response);
 			localStorage.setItem('applicationServerPublicKey',response.public_key);
 		}
 	})
