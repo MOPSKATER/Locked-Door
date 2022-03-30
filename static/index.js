@@ -129,10 +129,12 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
 		})
 		.catch(function(error) {
 			console.error('Service Worker Error', error);
+			alert(error)
 		});
 } else {
 	console.warn('Push meapplicationServerPublicKeyssaging is not supported');
-	pushButton.textContent = 'Push Not Supported';
+	pushButton.textContent = 'Benachrichtigung nicht unterstützt';
+	pushButton.disabled = ture;
 }
 
 
