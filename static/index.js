@@ -38,26 +38,26 @@ function updateBtn() {
 }
 
 function updateSubscriptionOnServer(subscription) {
-	$.ajax({
-		type:"POST",
-		url:'/subscription/',
-		content_type: "application/json",
-		data: {"subscription_token": JSON.stringify(subscription)},
-		success:function(response){
-			console.log("response",response);
-			localStorage.setItem('applicationServerPublicKey',response.public_key);
-		}
-	})
-
-	const subscriptionJson = document.querySelector('.js-subscription-json');
-	const subscriptionDetails =
-		document.querySelector('.js-subscription-details');
-
 	if (subscription) {
-		subscriptionJson.textContent = JSON.stringify(subscription);
-		subscriptionDetails.classList.remove('is-invisible');
+		$.ajax({
+			type:"POST",
+			url:'/subscription/',
+			content_type: "application/json",
+			data: {"subscription_token": JSON.stringify(subscription)},
+			success:function(response){
+				console.log("response",response);
+				localStorage.setItem('applicationServerPublicKey',response.public_key);
+			}
+		})
 	} else {
-		subscriptionDetails.classList.add('is-invisible');
+		$.ajax({
+			type:"DELETE",
+			url:'/subscription/',
+			success:function(response){
+				console.log("response",response);
+				localStorage.removeItem('applicationServerPublicKey');('applicationServerPublicKey',response.public_key);
+			}
+		})
 	}
 }
 
