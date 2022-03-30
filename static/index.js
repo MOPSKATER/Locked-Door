@@ -55,7 +55,6 @@ function updateSubscriptionOnServer(subscription) {
 			url:'/subscription/',
 			success:function(response){
 				console.log("response",response);
-				localStorage.removeItem('applicationServerPublicKey');('applicationServerPublicKey',response.public_key);
 			}
 		})
 	}
