@@ -38,6 +38,7 @@ class Opened(db.Model):
     time = db.Column(db.DateTime, primary_key=True)
     devicekey = db.Column(db.String(64), ForeignKey(
         "devices.apikey"), primary_key=True)
+    devicename = db.Column(db.String(50), nullable=True)
 
     def toJSON(self):
         return json.dumps({"time": self.time.strftime("%d/%m/%Y, %H:%M:%S"), "device": self.device.toJSON()})
