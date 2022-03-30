@@ -141,7 +141,7 @@ def get_dataAPI():
     for opened in db.session.query(Opened).order_by(desc("time")).limit(5).all():
         data = {
             "time": opened.time.strftime("%d/%m/%Y, %H:%M:%S"),
-            "device": opened.device.name
+            "name": opened.device.name
         }
         openedList.append(json.dumps(data))
 

@@ -14,9 +14,23 @@ body {
   overflow-x: hidden;
 }
 
+@media only screen and (max-width: 600px) {
+  #devices {
+    width: 90vw;
+    height: 50vh;
+
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    grid-template-rows: 33% 33% 33% 33%;
+    overflow: scroll;
+    overflow-x: hidden;
+  }
+}
+
 .device {
   text-align: center;
-  max-height: 100%;
+  max-height: 50%;
+  min-width: 40%;
   max-width: 90%;
   margin: 0px;
   border: 2px solid black;
@@ -32,7 +46,7 @@ body {
 
 #log {
   width: 90vw;
-  height: 20vh;
+  height: 16vh;
   margin-top: 3vh;
   padding-left: 0px;
 }
@@ -40,10 +54,12 @@ body {
 ul {
   list-style: none;
   height: 100%;
+  padding-left: 0px;
 }
 
 li {
   height: 20%;
+  max-height: 3vh;
   font-size: small;
   color: white;
 }
@@ -59,13 +75,13 @@ svg {
 }
 
 #subscriber {
-  margin-top: 3vh;
+  margin-top: 1vh;
   border-radius: 10px;
   padding: 1%;
   background-color: transparent;
   color: #1ecd97;
   border: 1px solid #1ecd97;
-  font-size: x-large;
+  font-size: large;
 }
 
 #subscriber:hover {

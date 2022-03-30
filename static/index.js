@@ -184,7 +184,7 @@ $(document).ready(function(){
 				var jstamp = JSON.parse(stamp);
 				var tempStamp = document.getElementsByTagName("template")[1];
 				var clone = tempStamp.content.cloneNode(true);
-				var name = jstamp["name"] == null ? "Unbenannt" : jstamp.name;
+				var name = jstamp.name == null ? "Unbenannt" : jstamp.name;
 				var entry = clone.querySelector("#entry");
 				entry.innerHTML = name + ": " + jstamp.time;
 				openedlist.appendChild(clone);
