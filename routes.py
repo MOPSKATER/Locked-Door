@@ -73,6 +73,7 @@ def subscription():
 
     current_user.token = request.form["subscription_token"]
     db.session.commit()
+    x = current_user.token
     return Response(status=201)
 
 
@@ -103,13 +104,18 @@ def boardAPI():
                 if device.apikey == api_key:
                     new_openend.devicekey = device.apikey
                     new_openend.devicename = None if device.name == None else device.name
+                    break
             db.session.add(new_openend)
             db.session.commit()
             for user in Users.query.all():
                 if user.token != None:
                     try:
-                        send_web_push(json.loads(
-                            user.token), user.username)
+                        x = send_web_push(
+                            json.loads(user.token),
+                            json.dumps({
+                                "name": "Unbenannt" if device.name == None else device.name,
+                                "time": "Zeitstempel error" if new_openend.time == None else new_openend.time.strftime("%d/%m/%Y %H:%M:%S")
+                            }))
                     except Exception as e:
                         print("error", e)
         return Response(status=200)

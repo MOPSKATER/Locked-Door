@@ -22,7 +22,7 @@ function urlB64ToUint8Array(base64String) {
 
 function updateBtn() {
 	if (Notification.permission === 'denied') {
-		pushButton.textContent = 'Einen Moment';
+		pushButton.textContent = 'Fehler';
 		pushButton.disabled = true;
 		updateSubscriptionOnServer(null);
 		return;

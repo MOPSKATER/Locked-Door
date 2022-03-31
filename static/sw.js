@@ -22,11 +22,13 @@ function urlB64ToUint8Array(base64String) {
 }
 
 self.addEventListener('push', function(event) {
-  // data = event.data.json();
-  const title = "Test" // data.name;
+  var data = event.data.json();
+  if (!data)
+    return
+
+  const title = data.name;
   const options = {
-    //TODO change body
-    body: `"${event.data.text()}"`,
+    body: "Türe geöffnet am " + data.time,  
     icon: 'images/icon.png',
     badge: 'images/badge.png'
   };
