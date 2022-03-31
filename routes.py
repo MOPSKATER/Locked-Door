@@ -1,12 +1,9 @@
-
 import json
 import flask
-from numpy import delete
 from sqlalchemy import desc
 import flask_bcrypt as bcrypt
 from datetime import datetime
 from cerberus import Validator
-from zmq import device
 from models import Devices, Opened, Users
 from __main__ import app, login_manager, db
 from flask import Response, render_template, request

@@ -1,6 +1,6 @@
 import os
-from flask_wtf import FlaskForm
 from pywebpush import webpush
+from flask_wtf import FlaskForm
 from wtforms.validators import InputRequired, Length
 from wtforms import StringField, PasswordField, SubmitField
 

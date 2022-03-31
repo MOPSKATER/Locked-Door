@@ -1,9 +1,9 @@
 import json
 from __main__ import db
-from sqlalchemy import orm, ForeignKey
-from sqlalchemy.orm import relationship
 from datetime import datetime
 from flask_login import UserMixin
+from sqlalchemy import orm, ForeignKey
+from sqlalchemy.orm import relationship
 
 
 class Users(db.Model, UserMixin):
