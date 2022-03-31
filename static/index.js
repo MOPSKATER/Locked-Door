@@ -134,7 +134,7 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
 } else {
 	console.warn('Push meapplicationServerPublicKeyssaging is not supported');
 	pushButton.textContent = 'Benachrichtigung nicht unterstützt';
-	pushButton.disabled = ture;
+	pushButton.disabled = true;
 }
 
 
@@ -165,14 +165,15 @@ $(document).ready(function(){
 				var lastSignal = clone.querySelector("#lastsignal");
 
 				name.innerHTML = jdevice.name == null ? "Unbenannt" : jdevice.name;
-				var date = jdevice.lastSignal == null ? null : new Date(jdevice.lastSignal);
+				var date = jdevice.lastSignal == null ? null : Date.parse(jdevice.lastSignal);
 
 				if (!date){
 					lastSignal.style.color = "red";
 					lastSignal.innerHTML = "-";
 				}
 				else{
-					deltadate = (new Date.now() - date) / 60000;
+					var deltadate = (Date.now() - date) / 600;
+					deltadate = Math.round(deltadate) / 100
 					if (deltadate > 1)
 						lastSignal.style.color = "red";
 					else

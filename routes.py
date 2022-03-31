@@ -97,15 +97,16 @@ def boardAPI():
                 db.session.commit()
                 devices = Devices.query.all()
         elif command == "alert":
+            new_openend = Opened()
+            new_openend.time = datetime.now()
+            for device in devices:
+                if device.apikey == api_key:
+                    new_openend.devicekey = device.apikey
+                    new_openend.devicename = None if device.name == None else device.name
+            db.session.add(new_openend)
+            db.session.commit()
             for user in Users.query.all():
                 send_web_push(json.loads(user.token), user.username)
-                new_openend = Opened()
-                new_openend.time = datetime.now()
-                for device in devices:
-                    if device.apikey == api_key:
-                        new_openend.device = device
-                db.session.add(new_openend)
-                db.seccion.commit()
         return Response(status=200)
     return Response("Wrong api key", status=403)
 
@@ -133,14 +134,14 @@ def get_dataAPI():
     for device in devices:
         data = {
             "name": device.name,
-            "lastSignal": device.lastSignal
+            "lastSignal": None if device.lastSignal == None else device.lastSignal.strftime("%Y-%m-%dT%H:%M:%S.0")
         }
         devs.append(json.dumps(data))
 
     openedList = []
     for opened in db.session.query(Opened).order_by(desc("time")).limit(5).all():
         data = {
-            "time": opened.time.strftime("%d/%m/%Y, %H:%M:%S"),
+            "time": opened.time.strftime("%d/%m/%Y %H:%M:%S"),
             "name": opened.device.name if opened.devicename == None else opened.devicename
         }
         openedList.append(json.dumps(data))

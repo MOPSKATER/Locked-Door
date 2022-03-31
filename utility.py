@@ -1,5 +1,4 @@
 import os
-from __main__ import db
 from pywebpush import webpush
 from flask_wtf import FlaskForm
 from wtforms.validators import InputRequired, Length
