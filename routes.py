@@ -106,7 +106,12 @@ def boardAPI():
             db.session.add(new_openend)
             db.session.commit()
             for user in Users.query.all():
-                send_web_push(json.loads(user.token), user.username)
+                if user.token != None:
+                    try:
+                        send_web_push(json.loads(
+                            user.token), user.username)
+                    except Exception as e:
+                        print("error", e)
         return Response(status=200)
     return Response("Wrong api key", status=403)
 

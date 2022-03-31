@@ -1,5 +1,3 @@
-// sw.js
-
 'use strict';
 
 /* eslint-disable max-len */
@@ -24,11 +22,10 @@ function urlB64ToUint8Array(base64String) {
 }
 
 self.addEventListener('push', function(event) {
-  console.log('[Service Worker] Push Received.');
-  console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
-
-  const title = 'Push Codelab';
+  // data = event.data.json();
+  const title = "Test" // data.name;
   const options = {
+    //TODO change body
     body: `"${event.data.text()}"`,
     icon: 'images/icon.png',
     badge: 'images/badge.png'
