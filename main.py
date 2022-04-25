@@ -4,7 +4,8 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 
 
-if not argv[1]:
+if not len(argv) == 2:
+    print("usage: python3 main.py <secret key>")
     exit(1)
 
 app = Flask(__name__)
