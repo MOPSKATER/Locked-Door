@@ -82,7 +82,7 @@ def boardAPI():
     command = request.args.get("command")
     if api_key in api_keys:
         global devices
-        if command == "alive":
+        if command == "alive" or command == "alert":
             missing = True
             for device in devices:
                 if device.apikey == api_key:
@@ -94,7 +94,7 @@ def boardAPI():
                 db.session.add(new_Device)
                 db.session.commit()
                 devices = Devices.query.all()
-        elif command == "alert":
+        if command == "alert":
             new_openend = Opened()
             new_openend.time = datetime.now()
             for device in devices:
