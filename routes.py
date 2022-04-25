@@ -107,7 +107,7 @@ def boardAPI():
             for user in Users.query.all():
                 if user.token != None:
                     try:
-                        x = send_web_push(
+                        send_web_push(
                             json.loads(user.token),
                             json.dumps({
                                 "name": "Unbenannt" if device.name == None else device.name,
