@@ -16,7 +16,7 @@ VAPID_PUBLIC_KEY = open(
     DER_BASE64_ENCODED_PUBLIC_KEY_FILE_PATH, "r+").read().strip("\n")
 
 VAPID_CLAIMS = {
-    "sub": "mail@localhost"
+    "sub": "mailto:mail@localhost"
 }
 
 
