@@ -4,3 +4,5 @@ public_key.txt
 __pycache__
 *.db
 apikeys.txt
+venv
+.*

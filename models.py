@@ -1,5 +1,5 @@
 import json
-from __main__ import db
+from main import db
 from datetime import datetime
 from flask_login import UserMixin
 from sqlalchemy import orm, ForeignKey

@@ -5,7 +5,7 @@ import flask_bcrypt as bcrypt
 from datetime import datetime
 from cerberus import Validator
 from models import Devices, Opened, Users
-from __main__ import app, login_manager, db
+from main import app, login_manager, db
 from flask import Response, render_template, request
 from utility import LoginForm, VAPID_PUBLIC_KEY, send_web_push
 from flask_login import current_user, login_required, login_user
